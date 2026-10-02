@@ -4,7 +4,7 @@
 
 <strong>A blueprint for turning the coding agent you already use into a data analyst you can check.</strong>
 
-looks it up before it queries · never writes to your warehouse · shows what an answer rests on · says what it did not check · keeps every correction
+looks it up before it queries · never writes to your warehouse · shows what an answer rests on · flags its own blind spots · keeps every correction
 
 <a href="#what-it-is">What it is</a> ·
 <a href="#getting-started">Getting started</a> ·
