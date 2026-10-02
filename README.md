@@ -30,7 +30,7 @@ It is written for any agent that reads an `AGENTS.md` file and can run a query, 
 ## Getting started
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/StefDev22/analytics-agent-blueprint.git
 ```
 
 Open the folder in your coding agent and type:
