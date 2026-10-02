@@ -37,12 +37,12 @@ For each part above, ask how someone could reasonably compute a different number
 
 ## Step 5: Write and test the canonical SQL fragment
 
-Write the reusable expression or CTE that computes the metric, following `docs/sql-style-guide.md`. It is a building block, not the answer to a particular question: no hard-coded date window unless the window is part of the definition. Run it through `skills/sql-preflight/SKILL.md`.
+Write the reusable expression or CTE that computes the metric, following `docs/sql-style-guide.md`. It is a building block, not the answer to a particular question: no hard-coded date window unless the window is part of the definition. A fragment can be a bare expression, which preflight cannot pass on its own, so wrap it in a complete query that contains the fragment exactly as written (the source tables, filters and window around it), and preflight and run that wrapper query.
 
 Then test it:
 
 1. Ask the user for a figure they already trust for this metric (a report, a dashboard tile), with its window and source. Agree the tolerance before you compute.
-2. Compute the fragment for exactly that window and compare. On a match, record in the Changelog the source and window it was tested against, without the numbers.
+2. Compute the fragment through the wrapper query for exactly that window and compare. On a match, record in the Changelog the source and window it was tested against, without the numbers.
 3. On a mismatch, do not tweak the fragment until it agrees. Find out why with the "Two numbers disagree" procedure in `skills/data-quality-check/SKILL.md`; the gap is often a definition choice the user has to make.
 4. With no trusted figure, run a sanity check instead (a plausible range, parts that add up to the whole) and record in the Changelog that it was not tested against a trusted figure.
 
@@ -88,6 +88,6 @@ Retire a metric only when the user asks: `status: deprecated`, a Changelog line 
 ## Done when
 
 - `metrics/<metric_name>.md` exists from the template, `status: draft` (or `active` after an explicit yes), every section filled, with a Changelog line for this session.
-- The fragment passed preflight and was tested against a trusted figure, or the Changelog says why not.
+- A wrapper query holding the exact fragment passed preflight and was tested against a trusted figure, or the Changelog says why not.
 - The file holds no result number and no full gold query.
 - `metrics/INDEX.md` has exactly one row for it with the current status, and its domain doc lists it.

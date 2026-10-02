@@ -27,7 +27,7 @@ Then read the schema through the connection in `docs/access.md`: the warehouse's
 
 ## Step 2: Stay within the limits
 
-Every profiling query goes through `skills/sql-preflight/SKILL.md` before it runs, and a FAIL is fixed. Respect the limits in `docs/access.md` and estimate the cost first when it says how. On a large table, profile a bounded recent window of the date column and record which window. If a query would still exceed a limit, follow the access doc's rule: ask the user or do not run it. With file exports, profile the file and note that the profile covers that export, not the live table.
+Every profiling query goes through `skills/sql-preflight/SKILL.md` before it runs, and a FAIL is fixed. P2 (documented tables) is NA for the table being onboarded, since these queries exist to write its doc; any other table they read still needs one. Respect the limits in `docs/access.md` and estimate the cost first when it says how. On a large table, profile a bounded recent window of the date column and record which window. If a query would still exceed a limit, follow the access doc's rule: ask the user or do not run it. With file exports, profile the file and note that the profile covers that export, not the live table.
 
 ## Step 3: Profile cheaply
 

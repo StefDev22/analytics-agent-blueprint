@@ -62,7 +62,8 @@ This session reads the bank and the gold, so it never answers a question itself.
 
 1. List the `approved` entries in `evals/bank/`. Skip `proposed` ones and name them in the summary under Not run.
 2. Pick the slice: the tuning slice (`held_out: false`) by default. The held-out slice runs only at the end of a tuning round, or when the user asks for a check-up.
-3. Create the run folder with a short label, and one subfolder per question.
+3. Before any blind session starts, search `queries/`, `analyses/`, `dq/` and `docs/` for filed work stating the answer to a selected question for its window. Such a question is not runnable: report it as blocked, cause noted, and give it a new window through Mode 1 before the next run.
+4. Create the run folder with a short label, and one subfolder per question.
 
 ### Step 2: answer blind
 
@@ -101,7 +102,7 @@ The grader is this session or the user, never the session that answered.
 python3 evals/grade.py --gold <dir>/gold.csv --candidate <dir>/candidate.csv --keys <keys> --measures <measures> --tolerance <tolerance>
 ```
 
-Exit 0 is PASS, 1 is FAIL. Exit 2 means the grade could not be computed: when a candidate column has a different name but plainly the same meaning, rename it in a copy, record the rename in `grade.md`, and grade again; when the candidate lacks the measure, has the wrong grain or duplicate keys, it is a FAIL. A missing `candidate.csv` is a FAIL; a warehouse that could not be reached is BLOCKED.
+Exit 0 is PASS, 1 is FAIL, including a candidate of the wrong shape (duplicate keys or headers, a missing key or measure column, ragged rows), with the problem printed. If the only problem is a candidate column named differently but plainly meaning the same, rename it in a copy, record the rename in `grade.md`, and grade again. Exit 2 means no grade was computed: fix a usage error and rerun; a missing or unreadable `candidate.csv` is a FAIL; a problem in the gold file, or a warehouse that could not be reached, is BLOCKED.
 
 Without Python, compare by hand and write the same verdict: line up rows on the keys; list gold rows missing from the candidate and candidate rows not in the gold; for each measure, pass when the difference is at most tolerance times the gold value, or at most the tolerance itself when the gold value is 0.
 

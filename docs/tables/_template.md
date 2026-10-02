@@ -17,7 +17,7 @@ and a "Stub, not profiled" line under Last profiled. Delete this comment in the 
 
 ## Partition or date column
 
-[The column every query filters on, its type and timezone. Say if the table is not partitioned.]
+[The partition or date column, its type and timezone. Say whether a filter on it is required and why (cost, or correctness), or that the table is not partitioned and needs none.]
 
 ## Columns
 

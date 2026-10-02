@@ -15,9 +15,9 @@ Have open: `docs/access.md`, the `docs/tables/` doc for every table read, any `m
 
 **P1 Read-only.** One statement, starting with `SELECT`, `WITH` or the dialect's read-only catalog command. FAIL: more than one statement, or any write or DDL anywhere, including inside a CTE, subquery or scripting block: insert, update, delete, merge, create, alter, drop, truncate, grant, revoke, `SELECT ... INTO` a new table, a procedure call, dynamic SQL, an export or copy, or the dialect's equivalent. WARN: a write keyword only inside a string or comment.
 
-**P2 Documented tables.** FAIL: a table read has no doc in `docs/tables/`; write a stub through `skills/onboard-table/SKILL.md`. NA: catalog-only queries.
+**P2 Documented tables.** FAIL: a table read has no doc in `docs/tables/`; write a stub through `skills/onboard-table/SKILL.md`. NA: catalog-only queries, and the schema and profiling queries `onboard-table` runs on the table it is onboarding, because they exist to write that doc; say so in the reason.
 
-**P3 Partition or date filter.** Each table whose doc names a partition or date column is filtered on it in the first CTE that reads it. FAIL: missing. WARN: the column is wrapped in a function the doc does not say still prunes. NA: the doc says not partitioned, or catalog-only.
+**P3 Partition or date filter.** Each table whose doc says a partition or date filter is needed, for cost or for correctness, is filtered on it in the first CTE that reads it. FAIL: missing. WARN: the column is wrapped in a function the doc does not say still prunes. NA, with the reason: the doc asks for no filter (not partitioned, or a small dimension table), the logic needs the full history (first-ever events, lifetime totals), filtering would change the meaning of a join, or catalog-only.
 
 **P4 Cost and rows.** Run the estimate method in `docs/access.md` and compare with its limits; the result must fit the row cap. FAIL: over a limit whose policy is "do not run it". WARN: over a limit whose policy is "ask the user first"; give the estimate in one sentence and run only after a yes for this exact query. NA: no estimate method; then an exploratory query carries a row limit and a narrow window (a row limit caps rows returned, not scan).
 

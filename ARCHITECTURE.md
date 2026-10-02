@@ -4,7 +4,7 @@ The map of where things live and how they connect. The rules are in `AGENTS.md` 
 
 ## What this repo is
 
-An operating manual, a knowledge base and a filing system for analyst work done by a coding agent on the user's warehouse. The agent reads the manual, looks things up in the knowledge base, writes SQL under a preflight checklist, runs it read-only through whatever connection the user set up, and files each deliverable with a receipt. It starts empty: the setup interview and every later correction fill it in.
+An operating manual, a knowledge base and a filing system for analyst work done by a coding agent on the user's warehouse. The agent reads the manual, looks things up in the knowledge base, writes SQL under a preflight checklist, runs it read-only through whatever connection the user set up, and files each deliverable where its task type says, with a receipt on every filed answer. It starts empty: the setup interview and every later correction fill it in.
 
 ## The request flow
 
@@ -17,7 +17,7 @@ An operating manual, a knowledge base and a filing system for analyst work done 
 | Preflight | Every query is checked against the generic checklist, then the user's own checks. A FAIL blocks. | `skills/sql-preflight/SKILL.md`, `docs/sql-checks.md` |
 | Execution | The query runs read-only through the connection the user chose. | `docs/access.md` |
 | Verification | The result is sanity-checked (row counts, totals, freshness, grain) before anyone reads it. | the runbook skill |
-| Filed deliverable | The answer lands in its dated folder with its INDEX row and a receipt. | `templates/receipt.md`, `skills/wrap-up-analysis/SKILL.md` |
+| Deliverable | A quick answer or lookup is given inline. An analysis or data-quality check lands in its dated folder with its INDEX row and a receipt; a reusable query lands in `queries/` with its INDEX row; a table or metric doc is written in place. | `docs/definition-of-done.md`, `templates/receipt.md`, `skills/wrap-up-analysis/SKILL.md` |
 | Correction loop | A mistake the user catches becomes a doc fix, a log entry and, when detectable, a new check and a golden question. | `docs/corrections.md`, `docs/sql-checks.md`, `evals/` |
 
 ## Layers

@@ -99,7 +99,14 @@ Deliberately not in this version: a second opinion from a different model; relia
 
 ## Tested with
 
-<!-- TESTED-WITH -->
+The onboarding and the question loop were run cold, in fresh headless sessions with scripted answers, on a small fictional set of CSV exports:
+
+| Agent | Result |
+|---|---|
+| Claude Code | all five setup passes ran, the quick answer matched the known figure |
+| Codex CLI | all five setup passes ran, the quick answer matched the known figure |
+
+Other agents and real warehouses are untested. If you try one, open an issue with what happened.
 
 ## Credits and sources
 

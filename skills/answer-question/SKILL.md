@@ -82,7 +82,7 @@ Window: <start> to <end>, <inclusive or exclusive>, <timezone>; data through <la
 Not checked: <what a careful analyst would still verify>
 ```
 
-No chart unless asked. If the number turns out to matter (it is surprising, or it needs a comparison to mean anything), say so and offer an analysis; do not upgrade silently.
+No chart unless asked. A chart asked for on a quick answer is shown inline or written to a temporary location outside the repo, and is not filed; if the user wants it kept, the request becomes an analysis. If the number turns out to matter (it is surprising, or it needs a comparison to mean anything), say so and offer an analysis; do not upgrade silently.
 
 ## Branch: reusable query
 

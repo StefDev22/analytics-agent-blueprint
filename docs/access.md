@@ -15,7 +15,7 @@ This file says how the agent reaches the warehouse, never what it logs in with. 
 
 ## Running a query
 
-[The exact steps the agent takes to run one read query and get the rows back: the tool or command, how the SQL is passed, the output format, and where results are written.]
+[The exact steps the agent takes to run one read query and get the rows back: the tool or command, how the SQL is passed, the output format, and where results are written. For file exports, or a script that does not take SQL: the local SQL engine used, how the files are loaded into an in-memory database (read-only where the engine allows), and how a query is then run against it.]
 
 ## Estimating cost before a run
 

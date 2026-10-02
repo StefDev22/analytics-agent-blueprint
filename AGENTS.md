@@ -4,7 +4,7 @@ The rules for any coding agent working in this repo. This file is hand-edited an
 
 ## Purpose
 
-This repo is an operating manual, a knowledge base and a filing system for analyst work that a coding agent does on the user's data warehouse. The agent follows the manual, looks facts up in the knowledge base before writing SQL, runs read-only queries, and files every deliverable in a dated, indexed folder. `ARCHITECTURE.md` is the map: open it when you need to find where something lives.
+This repo is an operating manual, a knowledge base and a filing system for analyst work that a coding agent does on the user's data warehouse. The agent follows the manual, looks facts up in the knowledge base before writing SQL, runs read-only queries, and delivers each result where the task router says: quick answers and lookups inline, reusable queries in `queries/`, table and metric docs in `docs/` and `metrics/`, and analyses and data-quality checks in a dated, indexed folder with a receipt. `ARCHITECTURE.md` is the map: open it when you need to find where something lives.
 
 ## First run
 
@@ -49,7 +49,7 @@ Skills are plain Markdown runbooks at `skills/<name>/SKILL.md`: open the file an
 
 ## Done
 
-A task is done when its deliverable exists and is indexed. The per-type criteria are in `docs/definition-of-done.md`. Rules that bind every type:
+A task is done when its deliverable exists, indexed where `docs/definition-of-done.md` asks for an index row. The per-type criteria are in `docs/definition-of-done.md`. Rules that bind every type:
 
 - **No undocumented table.** Touching a table with no doc means writing at least a stub in `docs/tables/` in the same session.
 - **No unindexed artifact.** Anything filed in `queries/`, `analyses/` or `dq/` gets its INDEX row in the same session.
@@ -63,7 +63,7 @@ A task is done when its deliverable exists and is indexed. The per-type criteria
 | a rule every task follows | this file, once; other files point here |
 | a rule for one task type | that skill's `SKILL.md` |
 | a fact about the warehouse or the business | `docs/` or `metrics/`, one owner each |
-| a one-off result | its dated folder and its INDEX row |
+| a filed analysis or data-quality check | its dated folder and its INDEX row |
 | a mistake and its fix | `docs/corrections.md` |
 | a recurring SQL trap | `docs/sql-checks.md` |
 | a problem with the repo itself | `docs/findings.md` |

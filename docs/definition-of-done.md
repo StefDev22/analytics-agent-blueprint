@@ -11,7 +11,7 @@ What "done" means for each task type in the router in `AGENTS.md`, plus the rule
 | New table or column | A complete doc (not a stub) in `docs/tables/` from its template, linked from the right domain doc, with its Last profiled date. |
 | New or changed metric | A file in `metrics/` from the template with `status: draft`, a changelog line, and its row in `metrics/INDEX.md`. It becomes `active` only when the user says so. |
 | Lookup | The answer was given inline with the file it came from. Nothing is filed. |
-| Golden questions and evals | New entries sit in `evals/bank/` with gold answers in `evals/bank/gold/` approved by the user; a run has a dated record of the questions, the grades and the failures. |
+| Golden questions and evals | New entries sit in `evals/bank/`: a number or table entry with a user-approved gold query in `evals/bank/gold/`, a clarify or refuse entry with a user-approved `expected_behaviour` and no gold query. A run has a dated record of the questions, the grades and the failures. |
 | Setup or reconnect | `docs/access.md` and `docs/business-context.md` are filled in, one test query ran, and the status line reads `Status: set up YYYY-MM-DD`. |
 
 ## Universal rules

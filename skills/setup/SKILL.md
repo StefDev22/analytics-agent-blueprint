@@ -24,13 +24,15 @@ Read the repo before asking anything. This is what makes setup resumable: a seco
 
 | Check | Pass |
 |---|---|
-| `docs/business-context.md` status line, and sections still showing `[bracketed]` placeholders or "Not given yet." | 1 |
+| `docs/business-context.md` status line, and sections still showing `[bracketed]` placeholders | 1 |
 | `docs/access.md` status line (`Status: set up YYYY-MM-DD` means done) | 2 |
 | Files in `docs/domains/` and `docs/tables/` other than `_template.md` | 3 |
 | Rows in `metrics/INDEX.md` | 4 |
 | Entries in `evals/bank/` | 5 |
 
-Tell the user in two or three lines what is done and which pass is next. Offer the "Not given yet." items once, in one line.
+"Not given yet." means offered and skipped: it does not reopen the pass, is listed once under Still open, and is re-asked only if the user asks.
+
+Tell the user in two or three lines what is done and which pass is next.
 
 - "Reconnect", or the access changed or broke: run pass 2 only.
 - The user arrived with a data question and nothing is set up: offer pass 2 first so the question can be answered sooner, then pass 1.
@@ -52,7 +54,7 @@ Writes `docs/access.md`. Detect first, then ask only what you could not see.
 
 1. **Look at what this agent already has:** a warehouse or database server in your own tool list (an MCP server), an export folder or a query script in the working folder. For a warehouse CLI the user names, check it is installed and logged in with its own status or version command, never by printing a config or token file.
 2. **Ask what is left**, for example: "Which warehouse do you use, and how do you query it from this machine today?" and "Which projects, databases or schemas should I read?"
-3. **Pick the method** with the user: an MCP server already configured in this agent, the warehouse's CLI already logged in, a script the user runs, or file exports in a folder. Record the exact steps to run one read query and get rows back. For exports, record the folder, the format and how you read the files, and never modify them.
+3. **Pick the method** with the user: an MCP server already configured in this agent, the warehouse's CLI already logged in, a script the user runs, or file exports in a folder. Record the exact steps to run one read query and get rows back. For exports, record the folder and format and never modify the files. The runbooks still need SQL, so for exports, or a script that does not take SQL, load the files into an in-memory database in a local SQL engine this agent already has (read-only where it allows) and write the exact load-and-query steps into `docs/access.md`; preflight, `.sql` files and receipts are unchanged. With no local SQL engine, say so, record the method as blocked under Last verified, and leave `Status: not set up`.
 4. **Dialect:** infer it from the warehouse; confirm with a version query if the dialect has one.
 5. **Cost before a run:** if the warehouse can estimate scan or cost without running (a dry run, an explain plan), record how and how to read it. If not, write "not available".
 6. **Limits:** propose defaults in one line and let the user change them: rows returned per query, a scan or cost cap if they want one, and whether to ask first or not run when a query would exceed one.
