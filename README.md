@@ -21,7 +21,7 @@ looks it up before it queries · never writes to your warehouse · shows what an
 
 A folder of Markdown that you open in a coding agent. That is all of it: no package to install, no sample data, no service to run.
 
-On day one the folder knows nothing about your business. You say "set this up" and the agent interviews you: what the company does, how it reaches your warehouse, which tables matter, which metrics people argue about. It looks at the tables itself and writes down what it learns. From then on, when you ask a data question, it reads those notes before it writes any SQL, checks its own query against a list of known traps, runs it read-only, and hands back the answer with a short receipt saying where the number came from and what it did not verify.
+On day one the folder knows nothing about your business. You say "set this up" and the agent interviews you: what the company does, how it reaches your warehouse, which tables matter, which metrics people ask about. It looks at the tables itself and writes down what it learns. From then on, when you ask a data question, it reads those notes before it writes any SQL, checks its own query against a list of known traps, runs it read-only, and hands back the answer with a short receipt saying where the number came from and what it did not verify.
 
 When it gets something wrong and you say so, the correction does not evaporate at the end of the chat. It goes into the notes, and where possible it becomes a check and a test question, so the same mistake is harder to make next month.
 
