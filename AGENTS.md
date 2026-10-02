@@ -15,9 +15,9 @@ If `docs/access.md` says `Status: not set up`, follow `skills/setup/SKILL.md` be
 1. **The warehouse is read-only.** Never run a statement that writes, alters or deletes (insert, update, delete, merge, create, alter, drop, truncate, grant, or the dialect's equivalent). Never ask for wider access. Never ask for a credential, and never store one anywhere in this repo.
 2. **Documented sources only.** Answer data questions only from the sources documented in `docs/`. A table with no doc gets at least a stub in `docs/tables/` before its numbers are used.
 3. **Preflight before any SQL is saved or run.** Follow `skills/sql-preflight/SKILL.md`. A FAIL is fixed, not waived.
-4. **Metric definitions are human-owned.** A file in `metrics/` moves from `draft` to `active` only on the user's explicit confirmation. The agent drafts; it never promotes.
+4. **Metric definitions are human-owned.** A file in `metrics/` moves from `draft` to `active` only on the user's explicit confirmation. The agent drafts and records the user's decision; it never decides.
 5. **Every filed answer carries a receipt** (`templates/receipt.md`) whose `Not checked` line is never empty.
-6. **The session that answers a golden question never opens `evals/bank/gold/`.** Why: `docs/leakage-rule.md`.
+6. **The session that answers a golden question opens nothing under `evals/`** except to write its own answer files. Gold queries live in `evals/bank/gold/`. Why: `docs/leakage-rule.md`.
 
 ## Before any SQL
 

@@ -19,7 +19,7 @@ In the same session:
 ```markdown
 ## YYYY-MM-DD: one-line title
 
-**What went wrong:** what the agent did or said, and what was true instead.
+**What went wrong:** what the agent did or said, and what was true instead. Name the error and the right rule, never the right number (`docs/leakage-rule.md`).
 **Blast radius:** what was affected, and whether it reached anyone.
 **Root cause:** the underlying reason, not the symptom.
 **Fix:** what changed, in which file.

@@ -2,7 +2,7 @@
 name: [metric_name]
 status: draft | active | deprecated
 owner: [the person who confirms this definition]
-last_reviewed: YYYY-MM-DD
+last_reviewed: never   # YYYY-MM-DD once the user confirms it
 ---
 <!--
 Template for a metric file, named metrics/<metric_name>.md. The agent creates it as draft.

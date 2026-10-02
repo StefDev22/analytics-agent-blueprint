@@ -1,6 +1,6 @@
 # Docs index
 
-One line per doc. Add a line when you add a doc.
+One line per doc directly under `docs/` and per domain doc. Add a line when you add one. Table docs are not listed here; each is linked from its domain doc's Key tables.
 
 - [access.md](access.md): how the agent reaches the warehouse, cost estimates, limits, and what makes it read-only. Written by setup.
 - [business-context.md](business-context.md): what the business does, who the user is, the metrics and decisions that matter. Written by setup.

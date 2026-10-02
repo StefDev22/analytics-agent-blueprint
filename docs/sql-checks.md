@@ -12,7 +12,7 @@ When a correction is detectable by reading the SQL text, add an entry in the sam
 ### SC<n>: short name
 
 - **Rule:** what the SQL must or must not do, in one sentence.
-- **Why:** the `docs/corrections.md` entry it came from (date and title).
+- **Why:** the `docs/corrections.md` entry or the `dq/` folder it came from (date and title).
 - **How to spot it:** what in the SQL text gives it away: a table, a column, a pattern.
 - **Severity:** FAIL (blocks save and run) or WARN (reported, does not block).
 - **Exceptions:** when the rule does not apply, or "none".
