@@ -1,23 +1,33 @@
+<div align="center">
+
 # analytics-agent-blueprint
 
-Turn your coding agent into a careful data analyst on your own warehouse. It looks things up before writing SQL, runs read-only, says what it did not check, and learns from every correction.
+<strong>A blueprint for turning the coding agent you already use into a data analyst you can check.</strong>
 
-**10** skills | **1** contract | **0** dependencies | any agent that reads `AGENTS.md` | any warehouse it can reach | MIT
+looks it up before it queries · never writes to your warehouse · shows what an answer rests on · says what it did not check · keeps every correction
 
----
+<a href="#what-it-is">What it is</a> ·
+<a href="#getting-started">Getting started</a> ·
+<a href="#what-to-ask-it">What to ask it</a> ·
+<a href="#how-it-works">How it works</a> ·
+<a href="#how-far-to-trust-it">How far to trust it</a> ·
+<a href="#adapting-it">Adapting it</a>
 
-## What this is
-
-- **A contract** (`AGENTS.md`): hard rules, a lookup order, and a router that sends each request to one runbook.
-- **A knowledge base that starts empty** and fills from an interview with you: your business, tables, metrics and traps.
-- **A filing system with receipts**: every filed answer says what it rests on and what was not checked.
-- **Golden questions**: questions you know the answer to, answered blind, to show whether it is getting better.
-
-What it is not: no sample data, nothing to install, not a semantic layer product. It is all Markdown.
+</div>
 
 ---
 
-## Quick start
+## What it is
+
+A folder of Markdown that you open in a coding agent. That is all of it: no package to install, no sample data, no service to run.
+
+On day one the folder knows nothing about your business. You say "set this up" and the agent interviews you: what the company does, how it reaches your warehouse, which tables matter, which metrics people argue about. It looks at the tables itself and writes down what it learns. From then on, when you ask a data question, it reads those notes before it writes any SQL, checks its own query against a list of known traps, runs it read-only, and hands back the answer with a short receipt saying where the number came from and what it did not verify.
+
+When it gets something wrong and you say so, the correction does not evaporate at the end of the chat. It goes into the notes, and where possible it becomes a check and a test question, so the same mistake is harder to make next month.
+
+It is written for any agent that reads an `AGENTS.md` file and can run a query, and for any warehouse that agent can reach: an MCP server, the warehouse's own command line, a script, or a folder of exported files.
+
+## Getting started
 
 ```bash
 git clone <repo-url>
@@ -29,233 +39,107 @@ Open the folder in your coding agent and type:
 set this up
 ```
 
-The agent interviews you, at most three questions at a time:
+The interview comes in five short passes, never more than three questions at a time, and you can skip anything or stop halfway. It will not ask for a password or a key, and it will not ask what it can find out by looking.
 
-```
-What does the business do, for whom, and how does it make money?
-Which warehouse do you use, and how do you query it from this machine today?
-What does a newcomer get wrong here? Which words have two meanings?
-```
+| Pass | What you talk about | What gets written |
+|---|---|---|
+| 1 | Your business and who asks you for numbers | `docs/business-context.md` |
+| 2 | How the agent reaches the warehouse, and what it is allowed to do there | `docs/access.md` |
+| 3 | The one area most questions come from, and its tables | `docs/domains/`, `docs/tables/` |
+| 4 | The two or three metrics you are asked for most | `metrics/` |
+| 5 | A few questions you already know the answer to | `evals/bank/` |
 
-It inspects tables, columns and the SQL dialect itself, asks only what lives in your head, and never asks for a credential.
+You do not need all five. Once the connection works and one table is documented, ask it something real.
 
-Five passes, each saving its files, so you can stop and resume:
+## What to ask it
 
-| Pass | Writes |
-|---|---|
-| 1. Your business | `docs/business-context.md` |
-| 2. Connection, tested | `docs/access.md` |
-| 3. First domain and tables | `docs/domains/`, `docs/tables/` |
-| 4. First metrics | `metrics/` |
-| 5. First golden questions | `evals/bank/` |
+Plain sentences. There are no commands to learn.
 
-It is useful after the connection and one documented table; later passes make answers better.
+**A number.** It answers inline with a three-line receipt and files nothing.
+> How many orders did we take last week?
 
-The connection can be whatever your agent already has: an MCP server, the warehouse's own CLI, a script, or exported files.
+**An explanation.** It first checks the move is real, then when it started and which segment carries it, and files the write-up with every query behind it.
+> Why did signups drop in March?
 
----
+**A table it has not seen.** It reads the schema, profiles the data, proves what one row is, and asks you only for the parts that live in your head.
+> We have a new order_items table. Document it.
 
-## Don't know what to do? Just ask.
+**A metric.** It pins down numerator, denominator, window and exclusions, and lists the readings people confuse it with. The definition stays a draft until you say yes.
+> Define repeat purchase rate.
 
-The agent knows this repo. Ask it:
+**Two numbers that disagree.** It lines them up one difference at a time: definition, window, timezone, filters, grain.
+> Finance and the dashboard disagree on last month's revenue. Find out why.
 
-```
-What is still open in setup?
-Where is net revenue defined, and is it active or a draft?
-What can you do here?
-```
+**A test of the agent itself.** You write questions you know the answer to; a fresh session answers them without seeing the key.
+> Write golden questions with me.
 
-It answers from the files and names them. This README is the reference; the agent is the guide.
+**A correction.** It redoes the number, fixes the note that misled it, and logs what happened.
+> That's wrong. Revenue here never includes cancelled orders.
 
----
+**Where things stand.** The agent can read the whole folder, so it is the fastest way around it.
+> What is still open in setup? Where is net revenue defined?
 
-## Things you can do
+## How it works
 
-### 1. Ask for a number
+Three parts, all of them files you can read.
 
-```
-How many orders did we take last week?
-```
+**The contract** is `AGENTS.md`. It holds the few rules that apply to everything (read-only, look it up first, a human owns the metric definitions) and a table that sends each kind of request to one runbook. It is short on purpose, so the agent reads all of it every time.
 
-It checks the docs, preflights its SQL, runs it read-only and answers with a three-line receipt. Nothing is filed.
+**The runbooks** are the ten files under `skills/`. Each covers one job: answering a question, checking SQL before it runs, documenting a table, defining a metric, checking data quality, filing an analysis, writing and running test questions, and the setup interview itself. The agent opens only the one the request needs.
 
-### 2. Ask why something moved
+**The knowledge** is everything under `docs/` and `metrics/`. It starts as empty templates and becomes the description of your business: one note per business area with the questions that must be settled before querying, one per table, one per metric, plus a log of corrections and your own list of SQL traps in `docs/sql-checks.md`.
 
-```
-Why did signups drop in March?
-```
-
-It asks what prompted it, checks whether the move is real, when it started and which segment carries it, then files the findings in `analyses/` with every query and a receipt.
-
-### 3. Document a table
-
-```
-Document the new order_items table.
-```
-
-It reads the schema, profiles the table, proves the grain, and asks only what inspection cannot show. The doc lands in `docs/tables/`.
-
-### 4. Define a metric
-
-```
-Define repeat purchase rate.
-```
-
-It pins numerator, denominator, grain, window and exclusions, and tests against a figure you trust. The file in `metrics/` stays a draft until you say yes.
-
-### 5. Check data or reconcile two numbers
-
-```
-Finance and the dashboard disagree on last month's revenue. Reconcile them.
-```
-
-It aligns the two sides one axis at a time (definition, window, timezone, filters, grain) and concludes expected, bug or unresolved. The verdict is filed in `dq/`.
-
-### 6. Write golden questions and run them blind
-
-```
-Write golden questions with me.
-Run the evals.
-```
-
-You approve each gold query; the answering session never sees it. Fresh sessions answer blind, and a different session, or you, compares results by hand within a tolerance.
-
-### 7. Correct it
-
-```
-That's wrong: revenue here excludes refunds.
-```
-
-It redoes the affected numbers, fixes the wrong doc and logs it in `docs/corrections.md`. If a check could catch it, it adds one to `docs/sql-checks.md` plus a golden question.
-
----
-
-## How a question gets answered
-
-```
-question --> 1. route --> 2. look up --> 3. preflight --> 4. run read-only
-                               ^                              |
-                               |                              v
-                               |                           5. verify
-                               |                              |
-                               |                              v
-docs, checks, golden questions-+                  6. answer with a receipt
-          ^                                                   |
-          |                                                   v
-          +--------------- you correct it <-------------- 7. file it
-```
-
-1. **Route** (`task-router`): one of nine task types, and how deep to go.
-2. **Look up** (`knowledge-router`): metrics, domain and table docs, prior work, past corrections.
-3. **Preflight** (`sql-preflight`): ten generic checks, then yours in `docs/sql-checks.md`. A FAIL blocks.
-4. **Run read-only** through the connection in `docs/access.md`.
-5. **Verify** (`answer-question`): row counts, fan-out, totals, nulls, freshness.
-6. **Answer with a receipt** (`templates/receipt.md`); "Not checked" is never empty.
-7. **File it** (`wrap-up-analysis`): a dated folder and its INDEX row.
-
-A quick answer's receipt; filed work gets the full one:
+Every filed answer ends with a receipt. A short one looks like this:
 
 ```
 Source: sales.orders; metric net_revenue (draft)
-Window: 2026-09-01 to 2026-09-30, inclusive, UTC; data through 2026-09-30
+Window: 2026-09-01 to 2026-09-30, inclusive, UTC
 Not checked: refunds booked after month end
 ```
 
----
+The last line is never allowed to be empty. `ARCHITECTURE.md` has the full map.
 
-## The ideas behind it
+## Why it is built this way
 
-From a year of running this pattern in production on a private repo, and from the write-ups under Credits.
+This comes out of a year of running the same pattern on a private production repo, and out of the public write-ups credited below. The short version:
 
-- **Accuracy is a context problem more than a model problem.** Wrong numbers mostly come from an undefined metric, an unwritten filter, a join that fans out.
-- **A thin router plus runbooks beats one giant prompt.** The agent reads only what the task needs.
-- **A human owns metric definitions.** The agent drafts; only your explicit yes makes one active.
-- **Look it up before writing SQL**, and settle ambiguity before the first query runs.
-- **Every answer carries a receipt** that says what was not checked.
-- **Every correction becomes a doc fix, a check and a test.**
-- **Golden questions with hidden answers show whether a change helped.**
-- **The knowledge base is plain Markdown in git**, reviewed and reverted like code.
+- Wrong numbers mostly come from missing context, not a weak model: an undefined metric, an unwritten filter, a join that repeats rows.
+- A short contract plus runbooks works better than one enormous prompt.
+- Metric definitions belong to a person. The agent drafts; it does not decide.
+- An answer you cannot trace is not finished.
+- A correction that is not written down will be needed again.
+- The only way to know whether a change helped is to ask questions whose answers the agent cannot see.
 
----
+## How far to trust it
 
-## What is in the box
+Be clear about what this is. The read-only rule is a sentence in a file, and the SQL check is the agent reading its own query against a list. Neither is enforcement. The guarantee that matters is a credential that cannot write, and setup asks about yours and records the answer.
 
-```
-AGENTS.md        the contract: hard rules, lookup order, task router
-ARCHITECTURE.md  the map: layers, request flow, who edits what
-skills/          ten runbooks
-docs/            access, business context, style guides, corrections, checks,
-                 domains/ and tables/
-metrics/         metric definitions, draft or active
-queries/         reusable SQL
-analyses/        dated analyses
-dq/              dated data-quality verdicts
-evals/           golden questions, hidden gold, run records
-templates/       receipt and analysis templates
-```
+The same goes for the other rules. Drafts stay drafts and answer keys stay hidden because the agent is told so. Golden questions are how you find out whether it listens, including questions where the right response is to ask you something or to refuse.
 
-| Skill | When it runs |
+So far it has been run from a cold start, with scripted answers and a small fictional set of exported files, in Claude Code and in Codex CLI. Both completed setup and returned the known figure. Other agents and real warehouses are untried. If you run it on one, please open an issue and say how it went.
+
+## Adapting it
+
+| If you want to... | Change this |
 |---|---|
-| `setup` | First run, reconnect |
-| `task-router` | Every request, first |
-| `knowledge-router` | Before SQL; lookups |
-| `answer-question` | A question needing SQL |
-| `sql-preflight` | Before SQL is saved or run |
-| `onboard-table` | A new or undocumented table |
-| `define-metric` | Define or change a metric |
-| `data-quality-check` | Completeness, reconciliation |
-| `wrap-up-analysis` | An analysis starts and ends |
-| `golden-questions` | Writing or running the bank |
+| Add a rule for every task | `AGENTS.md`, once |
+| Teach it a SQL trap specific to your data | `docs/sql-checks.md` |
+| Set house style for SQL, prose or charts | `docs/sql-style-guide.md`, `docs/writing-style.md`, `docs/viz-style-guide.md` |
+| Add a new kind of task | a new folder under `skills/` and a row in the router table in `AGENTS.md` |
+| Cover another part of the business | ask for it: "set up a second domain" |
 
----
+One habit keeps it healthy: each fact lives in exactly one file, and everything else points there.
 
-## Guardrails, honestly
+## Not in this version
 
-The read-only rule is a sentence in `AGENTS.md`; the preflight is a checklist the agent reads its own SQL against. Neither is enforcement. The real guarantee is a credential that cannot write; setup records what yours can do in `docs/access.md`.
+Left out on purpose, and natural next steps once the basics hold: a second opinion from a different model, asking the same question several times to see whether the answer is stable, guided exploration, notebooks, read-only copies for colleagues, a weekly tidy-up routine, recurring reports, and scripts or hooks that enforce what the prompts only ask for.
 
-The other rules (drafts stay drafts, gold stays hidden) hold because the agent is told so. Golden questions, including ones where the right answer is to ask or refuse, show whether it listens.
+## Credits and licence
 
----
-
-## Make it yours
-
-The files you are expected to edit:
-
-- `docs/sql-checks.md`: your own preflight checks, grown from corrections.
-- `docs/sql-style-guide.md`, `docs/writing-style.md`, `docs/viz-style-guide.md`: house style.
-- The router table in `AGENTS.md`, when you add a task type, and a new folder under `skills/` for its runbook.
-
-Keep one owner per fact: each rule or fact lives in one file and everything else points to it. "Where new things go" in `AGENTS.md` says which file owns what.
-
----
-
-## Later
-
-Deliberately not in this version: a second opinion from a different model; reliability runs that ask the same question several times and compare; guided exploration and exploration notebooks; read-only editions for colleagues; a weekly curation routine; recurring reports; an audit script and session hooks that enforce what the prompts ask for.
-
----
-
-## Tested with
-
-The onboarding and the question loop were run cold, in fresh headless sessions with scripted answers, on a small fictional set of CSV exports:
-
-| Agent | Result |
-|---|---|
-| Claude Code | all five setup passes ran, the quick answer matched the known figure |
-| Codex CLI | all five setup passes ran, the quick answer matched the known figure |
-
-Other agents and real warehouses are untested. If you try one, open an issue with what happened.
-
----
-
-## Credits and sources
+The ideas are not all mine. They lean on:
 
 - "How Anthropic enables self-service data analytics with Claude", Anthropic: https://claude.com/blog/how-anthropic-enables-self-service-data-analytics-with-claude
 - "Inside OpenAI's in-house data agent", OpenAI.
-- The AI Analyst Lab and `ai-analyst-plus` by Shane Butler (MIT), which inspired the phased setup interview and the confidence receipt: https://github.com/ai-analyst-lab/ai-analyst-plus
+- The AI Analyst Lab by Shane Butler, whose `ai-analyst` and `ai-analyst-plus` repos (MIT) inspired the setup interview and the receipt: https://github.com/ai-analyst-lab/ai-analyst
 
----
-
-## Licence
-
-MIT. See [LICENSE](LICENSE).
+Licensed under [MIT](LICENSE).
