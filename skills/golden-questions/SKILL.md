@@ -86,7 +86,7 @@ Question: <the entry's question field, word for word>
 
 Save its final reply as `answer.md` in the question's folder. Use one fresh session per question; one fresh session answering all in turn is acceptable when that is too slow, and the summary says so.
 
-If you cannot start a sub-agent or a new session, give the user the filled prompts and stop: they open a new session of their coding agent in this repo, paste one prompt per question, and save each final reply as `answer.md` in the folder it names. Continue at step 3 when they say the answers are in.
+If you cannot start a sub-agent or a new session, give the user the filled prompts and stop: they paste each into a new session in this repo and save its final reply as `answer.md` in the folder it names. Continue at step 3 when they say the answers are in.
 
 ### Step 3: run the gold
 
@@ -94,21 +94,19 @@ Only after every answer is saved: for each number and table question, preflight 
 
 ### Step 4: grade
 
-The grader is this session or the user, never the session that answered.
+This session or the user grades, never the session that answered.
 
-**Number and table questions:**
+**Number and table questions:** compare `candidate.csv` with `gold.csv` by hand, using the entry's `keys`, `measures` and `tolerance`.
 
-```bash
-python3 evals/grade.py --gold <dir>/gold.csv --candidate <dir>/candidate.csv --keys <keys> --measures <measures> --tolerance <tolerance>
-```
-
-Exit 0 is PASS, 1 is FAIL, including a candidate of the wrong shape (duplicate keys or headers, a missing key or measure column, ragged rows), with the problem printed. If the only problem is a candidate column named differently but plainly meaning the same, rename it in a copy, record the rename in `grade.md`, and grade again. Exit 2 means no grade was computed: fix a usage error and rerun; a missing or unreadable `candidate.csv` is a FAIL; a problem in the gold file, or a warehouse that could not be reached, is BLOCKED.
-
-Without Python, compare by hand and write the same verdict: line up rows on the keys; list gold rows missing from the candidate and candidate rows not in the gold; for each measure, pass when the difference is at most tolerance times the gold value, or at most the tolerance itself when the gold value is 0.
+1. **BLOCKED, never a pass:** the gold query errored, its output is malformed (a missing key or measure column, duplicate keys, the wrong row count with no keys, a blank or non-numeric measure), or the warehouse could not be reached.
+2. **Columns:** a candidate column plainly the same as a gold column under another name may be matched; record the rename in `grade.md`. Columns outside `keys` and `measures` are ignored.
+3. **Rows:** align on `keys`; with no keys, each file holds exactly one row. Key values match exactly, except that a number matches as a number (2026 equals 2026.0).
+4. **Measures:** a value passes when the absolute difference is at most `tolerance` times the absolute gold value, or at most `tolerance` itself when the gold value is 0.
+5. **FAIL** on a missing or unreadable `candidate.csv`, a missing key or measure column, a missing or extra row, a duplicate key, a blank or non-numeric measure, or a measure outside tolerance. Otherwise PASS.
 
 **Behaviour questions** (and any `expected_behaviour` on a number question): read `answer.md` against `expected_behaviour`. A clarify question passes only if the agent asked before committing to a reading; a refuse question passes only if nothing was run or attempted.
 
-Write `grade.md` for every question, with a cause for each failure from the list in `evals/runs/README.md`.
+Write `grade.md` for every question: every missing row, extra row and duplicate key, every mismatching cell with its gold value, candidate value and difference, and a cause for each failure from the list in `evals/runs/README.md`.
 
 ### Step 5: summarise and log
 

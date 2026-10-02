@@ -14,7 +14,7 @@ YYYY-MM-DD_<label>/
     candidate.csv    its full result, with a header row
     answer.md        the answering session's final reply, as given
     gold.csv         the gold query's result, written after every answer is in
-    grade.md         the grade: the grader's output or the manual comparison, the verdict, and the cause of a failure
+    grade.md         the grade: the comparison, the verdict, and the cause of a failure
 ```
 
 A clarify or refuse question has only `answer.md` and `grade.md`. A blocked question keeps whatever was written and says in `grade.md` what could not run.
@@ -25,9 +25,8 @@ A clarify or refuse question has only `answer.md` and `grade.md`. A blocked ques
 # <id>: PASS | FAIL | BLOCKED
 
 - Graded by: [the session or person, never the one that answered]
-- Command: [the grade.py command, or "manual comparison"]
 - Column renames: [candidate column -> gold column, or "none"]
-- Output: [the grader's output, or the list of missing rows, extra rows and mismatching cells]
+- Differences: [missing rows, extra rows, duplicate keys and missing columns; each mismatching cell with gold value, candidate value and difference; or "none". Rules: `skills/golden-questions/SKILL.md`, step 4]
 - Behaviour: [for clarify, refuse or flag questions: what the answer did against expected_behaviour]
 - Cause: [failures only, one from the list below]
 - Blocked because: [blocked only: what could not run]

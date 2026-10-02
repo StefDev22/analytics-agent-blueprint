@@ -24,7 +24,6 @@ When the agent gets one wrong, the cause is almost always missing or wrong conte
 ```
 evals/
   README.md            this file
-  grade.py             compares a candidate result with a gold result
   log.md               one row per run, append-only
   bank/
     _entry-template.md the shape of an entry
@@ -44,6 +43,6 @@ evals/
 1. Pick the slice: the tuning questions, or the held-out ones at the end of a round.
 2. Each approved question goes to a fresh session that has never opened `evals/`. It answers the stakeholder wording under the normal contract and saves its SQL and result into the run folder.
 3. Only after every answer is saved, the gold queries run, read-only and preflighted.
-4. Each result pair is graded with `python3 evals/grade.py`, or by hand where Python is not available. Questions whose right answer is to clarify or refuse are graded from the answer text against `expected_behaviour`.
+4. Each result pair is compared by hand, by the grading session or by you, under the rules in the runbook's Mode 2, step 4. Questions whose right answer is to clarify or refuse are graded from the answer text against `expected_behaviour`.
 5. The run gets a `summary.md` and a row in `log.md`.
 6. Each failure gets a cause and a fix in the docs, never the answer itself. The tuning slice runs again; the held-out slice runs once, last.
